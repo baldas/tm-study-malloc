@@ -1,0 +1,24 @@
+# tinySTM (http://www.tmware.org/tinystm) build
+#TMBUILD ?= tinystm
+
+# ======== Defines ========
+CC       := gcc
+#CPPFLAGS += -DNDEBUG
+
+
+CPPFLAGS += -I../lib -I../common/$(TMBUILD)
+#CFLAGS   += -Wall -Wextra
+CFLAGS   += -fno-builtin-malloc -fno-builtin-calloc -fno-builtin-realloc -fno-builtin-free
+CFLAGS   += -O3
+
+LD       := gcc
+LDFLAGS  += -lpthread
+
+TMLIBDIR ?= TMLIBDIR_IS_NOT_SET
+CPPFLAGS += -I$(TMLIBDIR)/include 
+# The atomic_ops include path is only required for tinySTM 1.0.3 and previous
+CPPFLAGS += -I$(TMLIBDIR)/src/atomic_ops
+LDFLAGS  += -L$(TMLIBDIR)/lib -lstm 
+LIBDEPS  += $(TMLIBDIR)/lib/libstm.a
+
+include ../common/Makefile.common

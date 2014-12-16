@@ -1,0 +1,39 @@
+Set type     : red-black tree
+CM           : DEFAULT
+Duration     : 10000
+Initial size : 4096
+Nb threads   : 8
+Value range  : 8192
+Seed         : 0
+Update rate  : 60
+Alternate    : 1
+Type sizes   : int=4/long=8/ptr=8/word=8
+Initializing STM
+STM flags    : -I./include -I./src -DNDEBUG -D_REENTRANT -I./src/atomic_ops -I./src -DDESIGN=0 -DCM=0 -DIRREVOCABLE_ENABLED -DTM_STATISTICS -DTM_STATISTICS2 -UNO_DUPLICATES_IN_RW_SETS -UWAIT_YIELD -UUSE_BLOOM_FILTER -UEPOCH_GC -UCONFLICT_TRACKING -UREAD_LOCKED_DATA -ULOCK_IDX_SWAP -UDEBUG -UDEBUG2 -USIGNAL_HANDLER -DTLS_COMPILER -UUNIT_TX -O3 -march=native -fno-strict-aliasing -fno-stack-protector -Wall -Wno-unused-function -Wno-unused-label
+Adding 4096 entries to set
+Set size     : 4096
+Creating thread 0
+Creating thread 1
+Creating thread 2
+Creating thread 3
+Creating thread 4
+Creating thread 5
+Creating thread 6
+Creating thread 7
+STARTING...
+STOPPING...
+Set size      : 4097 (expected: 4097)
+Duration      : 10001 (ms)
+#txs          : 65198974 ( 6519245.475452 / s )
+#read txs     : 26079598 ( 2607699.030097 / s )
+#update txs   : 39119376 ( 3911546.445355 / s )
+#commits      : 65198974 
+#aborts       : 1117848 
+  #lock-r     : 928284 
+  #lock-w     : 43355 
+  #val-r      : 12746 
+  #val-w      : 346 
+  #val-c      : 133117 
+  #inv-mem    : 0 
+#aborts>=1    : 442710 
+#aborts>=2    : 248265 

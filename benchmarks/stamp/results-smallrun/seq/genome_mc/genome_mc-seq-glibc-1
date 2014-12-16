@@ -1,0 +1,24 @@
+
+BeginRegion 0: 0.00031805
+Creating gene and segments... done.
+Gene length     = 16384
+Segment length  = 64
+Number segments = 16777216
+Sequencing gene... 
+BeginRegion 1: 2.64247
+
+BeginRegion 2: 14.6251
+done.
+Time = 11.982676
+Sequence matches gene: yes
+Deallocating memory... done.
+
+BeginRegion 3: 15.5751
+malloc_count ### mallocs/peak: 2,142,296 2,142,295   frees: 2,125,975    total: 1,420,135,786   peak: 1,420,135,786   current: 261,136
+==========
+bins: 16  32  48  64  96  128  256  512  1024  >1024 mallocs frees mem-allocated 
+sequential: 66  1,064,966  1  1  0  0  0  1  1  73  1,065,109  2,125,971  1,402,884,425
+parallel: 0  0  0  0  0  0  0  0  0  1  1  4  16,385
+transactional: 1,077,186  0  0  0  0  0  0  0  0  0  1,077,186  0  17,234,976
+==========
+total = 2,142,296

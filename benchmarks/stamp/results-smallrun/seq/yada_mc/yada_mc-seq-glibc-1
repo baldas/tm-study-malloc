@@ -1,0 +1,25 @@
+
+BeginRegion 0: 0.000316143
+Angle constraint = 15.000000
+Reading input... done.
+Initial number of mesh elements = 1999998
+Initial number of bad elements  = 267838
+Starting triangulation...
+BeginRegion 1: 23.5767
+
+BeginRegion 2: 47.6991
+ done.
+Time                            = 24.122
+Final mesh size                 = 2840482
+Number of elements processed    = 420110
+Final mesh is valid.
+
+BeginRegion 3: 47.6991
+malloc_count ### mallocs/peak: 65,371,125 30,682,138   frees: 34,689,024    total: 2,568,013,072   peak: 1,714,009,064   current: 1,714,007,296
+==========
+bins: 16  32  48  64  96  128  256  512  1024  >1024 mallocs frees mem-allocated 
+sequential: 11,999,822  7,999,913  43  2  0  2  2,000,000  2  6  26  21,999,816  8,999,905  992,780,272
+parallel: 15,575,266  11,360,922  1  2  0  1  1  0  0  0  26,936,193  21,469,051  609,334,240
+transactional: 10,932,524  2,744,030  14,532  0  0  0  2,744,030  0  0  0  16,435,116  4,220,068  965,898,560
+==========
+total = 65,371,125

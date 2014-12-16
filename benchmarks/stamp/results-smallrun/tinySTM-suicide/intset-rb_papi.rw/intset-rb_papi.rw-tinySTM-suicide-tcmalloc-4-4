@@ -1,0 +1,39 @@
+Set type     : red-black tree
+CM           : DEFAULT
+Duration     : 10000
+Initial size : 4096
+Nb threads   : 4
+Value range  : 8192
+Seed         : 0
+Update rate  : 60
+Alternate    : 1
+Type sizes   : int=4/long=8/ptr=8/word=8
+Initializing STM
+STM flags    : -I./include -I./src -DNDEBUG -D_REENTRANT -I./src/atomic_ops -I./src -DDESIGN=0 -DCM=0 -DIRREVOCABLE_ENABLED -DTM_STATISTICS -DTM_STATISTICS2 -UNO_DUPLICATES_IN_RW_SETS -UWAIT_YIELD -UUSE_BLOOM_FILTER -UEPOCH_GC -UCONFLICT_TRACKING -UREAD_LOCKED_DATA -ULOCK_IDX_SWAP -UDEBUG -UDEBUG2 -USIGNAL_HANDLER -DTLS_COMPILER -UUNIT_TX -O3 -march=native -fno-strict-aliasing -fno-stack-protector -Wall -Wno-unused-function -Wno-unused-label
+Adding 4096 entries to set
+Set size     : 4096
+PAPI version 5.2
+Creating thread 0
+Creating thread 1
+Creating thread 2
+Creating thread 3
+STARTING...
+STOPPING...
+Set size      : 4097 (expected: 4097)
+Duration      : 10000 (ms)
+#txs          : 38620196 ( 3862019.600000 / s )
+#read txs     : 15443570 ( 1544357.000000 / s )
+#update txs   : 23176626 ( 2317662.600000 / s )
+#accesses/misses: 45399292014 555028891 ( 1.22% )
+TOTINST: 85539536944
+UREFCYC: 79723507229
+#commits      : 38620196 
+#aborts       : 176165 
+  #lock-r     : 139647 
+  #lock-w     : 10825 
+  #val-r      : 4238 
+  #val-w      : 166 
+  #val-c      : 21289 
+  #inv-mem    : 0 
+#aborts>=1    : 86744 
+#aborts>=2    : 42087 

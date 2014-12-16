@@ -1,0 +1,37 @@
+Set type     : hash set
+CM           : DEFAULT
+Duration     : 10000
+Initial size : 4096
+Nb threads   : 6
+Value range  : 8192
+Seed         : 0
+Update rate  : 60
+Alternate    : 1
+Type sizes   : int=4/long=8/ptr=8/word=8
+Initializing STM
+STM flags    : -I./include -I./src -DNDEBUG -D_REENTRANT -I./src/atomic_ops -I./src -DDESIGN=0 -DCM=0 -DIRREVOCABLE_ENABLED -DTM_STATISTICS -DTM_STATISTICS2 -UNO_DUPLICATES_IN_RW_SETS -UWAIT_YIELD -UUSE_BLOOM_FILTER -UEPOCH_GC -UCONFLICT_TRACKING -UREAD_LOCKED_DATA -ULOCK_IDX_SWAP -UDEBUG -UDEBUG2 -USIGNAL_HANDLER -DTLS_COMPILER -UUNIT_TX -O3 -march=native -fno-strict-aliasing -fno-stack-protector -Wall -Wno-unused-function -Wno-unused-label
+Adding 4096 entries to set
+Set size     : 4096
+Creating thread 0
+Creating thread 1
+Creating thread 2
+Creating thread 3
+Creating thread 4
+Creating thread 5
+STARTING...
+STOPPING...
+Set size      : 4097 (expected: 4097)
+Duration      : 10000 (ms)
+#txs          : 93527684 ( 9352768.400000 / s )
+#read txs     : 37410013 ( 3741001.300000 / s )
+#update txs   : 56117671 ( 5611767.100000 / s )
+#commits      : 93527684 
+#aborts       : 6372272 
+  #lock-r     : 5400927 
+  #lock-w     : 964990 
+  #val-r      : 870 
+  #val-w      : 5485 
+  #val-c      : 0 
+  #inv-mem    : 0 
+#aborts>=1    : 4096516 
+#aborts>=2    : 1562868 

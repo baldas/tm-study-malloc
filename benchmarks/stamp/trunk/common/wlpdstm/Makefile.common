@@ -1,0 +1,21 @@
+# SwissTM build
+# TMBUILD ?= wlpdstm
+
+# ======== Defines ========
+CC       := gcc
+CPPFLAGS += -DIS_WLPDSTM
+#CPPFLAGS += -DNDEBUG
+CPPFLAGS += -I../lib -I../common/$(TMBUILD)
+#CFLAGS   += -Wall -Wextra
+CFLAGS   += -fno-builtin-malloc -fno-builtin-calloc -fno-builtin-realloc -fno-builtin-free
+CFLAGS   += -O3
+
+LD       := gcc
+LDFLAGS  += -lpthread
+
+TMLIBDIR ?= TMLIBDIR_IS_NOT_SET
+CPPFLAGS += -I$(TMLIBDIR)/include
+LDFLAGS  += -L$(TMLIBDIR)/lib -lwlpdstm
+LIBDEPS  += $(TMLIBDIR)/lib/libwlpdstm.a
+
+include ../common/Makefile.common

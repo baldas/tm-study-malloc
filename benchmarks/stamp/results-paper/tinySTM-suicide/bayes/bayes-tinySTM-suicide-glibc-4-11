@@ -1,0 +1,26 @@
+STM flags    : -I./include -I./src -DNDEBUG -D_REENTRANT -I./src/atomic_ops -I./src -DDESIGN=0 -DCM=0 -DIRREVOCABLE_ENABLED -DTM_STATISTICS -DTM_STATISTICS2 -UNO_DUPLICATES_IN_RW_SETS -UWAIT_YIELD -UUSE_BLOOM_FILTER -UEPOCH_GC -UCONFLICT_TRACKING -UREAD_LOCKED_DATA -ULOCK_IDX_SWAP -UDEBUG -UDEBUG2 -USIGNAL_HANDLER -DTLS_COMPILER -UUNIT_TX -O3 -march=native -fno-strict-aliasing -fno-stack-protector -Wall -Wno-unused-function -Wno-unused-label
+Random seed                = 1
+Number of vars             = 32
+Number of records          = 4096
+Max num parents            = 10
+% chance of parent         = 40
+Insert penalty             = 2
+Max num edge learned / var = 8
+Operation quality factor   = 1.000000
+Generating data... done.
+Generating adtree... done.
+Adtree time = 25.930707
+Learning structure...done.
+Time = 5.126249
+Learn score  = -67050.234375
+Actual score = -64654.265625
+#commits      : 2388 
+#aborts       : 39 
+  #lock-r     : 5 
+  #lock-w     : 1 
+  #val-r      : 20 
+  #val-w      : 0 
+  #val-c      : 13 
+  #inv-mem    : 0 
+#aborts>=1    : 26 
+#aborts>=2    : 8 

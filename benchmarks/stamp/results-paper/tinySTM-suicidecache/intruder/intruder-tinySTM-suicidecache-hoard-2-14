@@ -1,0 +1,18 @@
+STM flags    : -I./include -I./src -DNDEBUG -D_REENTRANT -I./src/atomic_ops -I./src -DDESIGN=0 -DCM=0 -DIRREVOCABLE_ENABLED -DTM_STATISTICS -DTM_STATISTICS2 -UNO_DUPLICATES_IN_RW_SETS -UWAIT_YIELD -UUSE_BLOOM_FILTER -UEPOCH_GC -UCONFLICT_TRACKING -UREAD_LOCKED_DATA -ULOCK_IDX_SWAP -UDEBUG -UDEBUG2 -USIGNAL_HANDLER -DTLS_COMPILER -UUNIT_TX -DALLOC_OPT_CACHE -O3 -march=native -fno-strict-aliasing -fno-stack-protector -Wall -Wno-unused-function -Wno-unused-label
+Percent attack  = 10
+Max data length = 128
+Num flow        = 262144
+Random seed     = 1
+Num attack      = 29395
+Time            = 31.428778
+Num found       = 29395
+#commits      : 23428127 
+#aborts       : 5101841 
+  #lock-r     : 4960219 
+  #lock-w     : 131096 
+  #val-r      : 9522 
+  #val-w      : 415 
+  #val-c      : 589 
+  #inv-mem    : 0 
+#aborts>=1    : 546829 
+#aborts>=2    : 379683 

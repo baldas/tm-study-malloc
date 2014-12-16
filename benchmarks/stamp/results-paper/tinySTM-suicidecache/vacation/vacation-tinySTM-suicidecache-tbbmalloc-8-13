@@ -1,0 +1,25 @@
+Initializing manager... done.
+Initializing clients... done.
+    Transactions        = 4194304
+    Clients             = 8
+    Transactions/client = 524288
+    Queries/transaction = 4
+    Relations           = 1048576
+    Query percent       = 60
+    Query range         = 629146
+    Percent user        = 90
+STM flags    : -I./include -I./src -DNDEBUG -D_REENTRANT -I./src/atomic_ops -I./src -DDESIGN=0 -DCM=0 -DIRREVOCABLE_ENABLED -DTM_STATISTICS -DTM_STATISTICS2 -UNO_DUPLICATES_IN_RW_SETS -UWAIT_YIELD -UUSE_BLOOM_FILTER -UEPOCH_GC -UCONFLICT_TRACKING -UREAD_LOCKED_DATA -ULOCK_IDX_SWAP -UDEBUG -UDEBUG2 -USIGNAL_HANDLER -DTLS_COMPILER -UUNIT_TX -DALLOC_OPT_CACHE -O3 -march=native -fno-strict-aliasing -fno-stack-protector -Wall -Wno-unused-function -Wno-unused-label
+Running clients... done.
+Time = 12.806561
+Checking tables... done.
+Deallocating memory... done.
+#commits      : 4194304 
+#aborts       : 118107 
+  #lock-r     : 111886 
+  #lock-w     : 29 
+  #val-r      : 2220 
+  #val-w      : 0 
+  #val-c      : 3972 
+  #inv-mem    : 0 
+#aborts>=1    : 12776 
+#aborts>=2    : 4728 

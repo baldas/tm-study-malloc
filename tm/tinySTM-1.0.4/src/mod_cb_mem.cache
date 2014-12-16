@@ -1,0 +1,470 @@
+
+#define PRE_ALLOCATED_ENTRIES 1000
+#define NUM_CATEGORIES 8
+
+static int sizetoclass_push[129] = {0,1/*8*/,2/*16*/,3/*24*/,3/*32*/,4/*40*/,4/*48*/,4/*56*/,4/*64*/,
+                               5/*72*/,5/*80*/,5/*88*/,5/*96*/,5/*104*/,5/*112*/,5/*120*/,5/*128*/,
+			       6/*136*/,6/*144*/,6/*152*/,6/*160*/,6/*168*/,6/*176*/,6/*184*/,6/*192*/,
+			       6/*200*/,6/*208*/,6/*216*/,6/*224*/,6/*232*/,6/*240*/,6/*248*/,6/*256*/,
+                               7/*264*/,7/*272*/,7/*280*/,7/*288*/,7/*296*/,7/*304*/,7/*312*/,7/*320*/,
+                               7/*328*/,7/*336*/,7/*344*/,7/*352*/,7/*360*/,7/*368*/,7/*376*/,7/*384*/,
+                               7/*392*/,7/*400*/,7/*408*/,7/*416*/,7/*424*/,7/*432*/,7/*440*/,7/*448*/,
+                               7/*456*/,7/*464*/,7/*472*/,7/*480*/,7/*488*/,7/*496*/,7/*504*/,7/*512*/,
+                               8/*520*/,8/*528*/,8/*536*/,8/*544*/,8/*552*/,8/*560*/,8/*568*/,8/*576*/,
+                               8/*584*/,8/*592*/,8/*600*/,8/*608*/,8/*616*/,8/*624*/,8/*632*/,8/*640*/,
+                               8/*648*/,8/*656*/,8/*664*/,8/*672*/,8/*680*/,8/*688*/,8/*696*/,8/*704*/,
+                               8/*722*/,8/*720*/,8/*728*/,8/*736*/,8/*744*/,8/*752*/,8/*760*/,8/*768*/,
+                               8/*776*/,8/*784*/,8/*792*/,8/*800*/,8/*808*/,8/*816*/,8/*824*/,8/*832*/,
+                               8/*840*/,8/*848*/,8/*856*/,8/*864*/,8/*872*/,8/*880*/,8/*888*/,8/*896*/,
+                               8/*904*/,8/*912*/,8/*920*/,8/*928*/,8/*936*/,8/*944*/,8/*952*/,8/*960*/,
+                               8/*968*/,8/*976*/,8/*984*/,8/*992*/,8/*1000*/,8/*1008*/,8/*1016*/,8/*1024*/,
+                          };
+static int sizetoclass_pop[129] = {0,1/*8*/,2/*16*/,3/*24*/,4/*32*/,4/*40*/,5/*48*/,5/*56*/,5/*64*/,
+                               5/*72*/,6/*80*/,6/*88*/,6/*96*/,6/*104*/,6/*112*/,6/*120*/,6/*128*/,
+			       6/*136*/,7/*144*/,7/*152*/,7/*160*/,7/*168*/,7/*176*/,7/*184*/,7/*192*/,
+			       7/*200*/,7/*208*/,7/*216*/,7/*224*/,7/*232*/,7/*240*/,7/*248*/,7/*256*/,
+                               7/*264*/,8/*272*/,8/*280*/,8/*288*/,8/*296*/,8/*304*/,8/*312*/,8/*320*/,
+                               8/*328*/,8/*336*/,8/*344*/,8/*352*/,8/*360*/,8/*368*/,8/*376*/,8/*384*/,
+                               8/*392*/,8/*400*/,8/*408*/,8/*416*/,8/*424*/,8/*432*/,8/*440*/,8/*448*/,
+                               8/*456*/,8/*464*/,8/*472*/,8/*480*/,8/*488*/,8/*496*/,8/*504*/,8/*512*/,
+                               8/*520*/,8/*528*/,8/*536*/,8/*544*/,8/*552*/,8/*560*/,8/*568*/,8/*576*/,
+                               8/*584*/,8/*592*/,8/*600*/,8/*608*/,8/*616*/,8/*624*/,8/*632*/,8/*640*/,
+                               8/*648*/,8/*656*/,8/*664*/,8/*672*/,8/*680*/,8/*688*/,8/*696*/,8/*704*/,
+                               8/*722*/,8/*720*/,8/*728*/,8/*736*/,8/*744*/,8/*752*/,8/*760*/,8/*768*/,
+                               8/*776*/,8/*784*/,8/*792*/,8/*800*/,8/*808*/,8/*816*/,8/*824*/,8/*832*/,
+                               8/*840*/,8/*848*/,8/*856*/,8/*864*/,8/*872*/,8/*880*/,8/*888*/,8/*896*/,
+                               8/*904*/,8/*912*/,8/*920*/,8/*928*/,8/*936*/,8/*944*/,8/*952*/,8/*960*/,
+                               8/*968*/,8/*976*/,8/*984*/,8/*992*/,8/*1000*/,8/*1008*/,8/*1016*/,8/*1024*/,
+                          };
+
+typedef struct mod_mem_block {          /* Block of allocated memory */
+  void *addr;                           /* Address of memory */
+  int  category;			/* log_2 of size of the block */
+} mod_mem_block_t;
+
+
+typedef struct mod_mem_cache {
+  void **category[NUM_CATEGORIES+1];
+  int  num_elements[NUM_CATEGORIES+1];
+  int  speculative[NUM_CATEGORIES+1];
+  int  max_size[NUM_CATEGORIES+1];
+} mod_mem_cache_t;
+
+
+
+typedef struct mod_cb_info {
+  unsigned short commit_size;           /* Array size for commit callbacks */
+  unsigned short commit_nb;             /* Number of commit callbacks */
+  mod_cb_entry_t *commit;               /* Commit callback entries */
+  unsigned short abort_size;            /* Array size for abort callbacks */
+  unsigned short abort_nb;              /* Number of abort callbacks */
+  mod_cb_entry_t *abort;                /* Abort callback entries */
+  
+  mod_mem_block_t *allocated;
+  mod_mem_block_t *freed;
+  mod_mem_cache_t cache;
+  int num_allocated;
+  int num_freed;
+  
+} mod_cb_info_t;
+
+
+
+static inline void mem_push(mod_cb_info_t *mi, int category, void *address)
+{
+  //fprintf(stdout, "pushing %x in class %d: size %d\n", address, category, mi->cache.num_elements[category]);
+  if (unlikely(mi->cache.num_elements[category] >= mi->cache.max_size[category])) {
+    mi->cache.max_size[category] *= 2;
+    mi->cache.category[category] = xrealloc(mi->cache.category[category], sizeof(void *) * mi->cache.max_size[category]);
+    if (mi->cache.category[category] == NULL) {
+      perror("realloc error");
+      exit(1);
+    }
+
+  } 
+  mi->cache.category[category][mi->cache.num_elements[category]++] = address;
+  mi->cache.speculative[category]++;
+}
+
+/* Returns either the address of an avaliable slot or NULL (if category is empty) */
+static inline void *mem_pop(mod_cb_info_t *mi, int category)
+{
+  if (mi->cache.speculative[category] == 0) return NULL;
+
+  return mi->cache.category[category][--mi->cache.speculative[category]];
+}
+
+void static inline cache_commit(mod_cb_info_t *mi)
+{
+  int ii;
+  for (ii=0; ii<NUM_CATEGORIES+1; ii++) 
+    mi->cache.num_elements[ii] = mi->cache.speculative[ii];
+}
+
+void static inline cache_abort(mod_cb_info_t *mi)
+{
+  int ii;
+  for (ii=0; ii<NUM_CATEGORIES+1; ii++) 
+    mi->cache.speculative[ii] = mi->cache.num_elements[ii] ;
+}
+
+
+/* ################################################################### *
+ * CALLBACKS FUNCTIONS
+ * ################################################################### */
+
+static INLINE void
+mod_cb_add_on_abort(mod_cb_info_t *icb, void (*f)(void *arg), void *arg)
+{
+  if (unlikely(icb->abort_nb >= icb->abort_size)) {
+    icb->abort_size *= 2;
+    icb->abort = xrealloc(icb->abort, sizeof(mod_cb_entry_t) * icb->abort_size);
+    if (icb->abort == NULL) {
+      perror("realloc error");
+      exit(1);
+    }
+  }
+  icb->abort[icb->abort_nb].f = f;
+  icb->abort[icb->abort_nb].arg = arg;
+  icb->abort_nb++;
+}
+
+
+static INLINE void
+mod_cb_add_on_commit(mod_cb_info_t *icb, void (*f)(void *arg), void *arg)
+{
+  if (unlikely(icb->commit_nb >= icb->commit_size)) {
+    icb->commit_size *= 2;
+    icb->commit = xrealloc(icb->commit, sizeof(mod_cb_entry_t) * icb->commit_size);
+    if (icb->commit == NULL) {
+      perror("realloc error");
+      exit(1);
+    }
+  }
+  icb->commit[icb->commit_nb].f = f;
+  icb->commit[icb->commit_nb].arg = arg;
+  icb->commit_nb++;
+}
+
+
+
+/* ################################################################### *
+ * MEMORY ALLOCATION FUNCTIONS
+ * ################################################################### */
+static INLINE void *
+int_stm_malloc(struct stm_tx *tx, size_t size)
+{
+  /* Memory will be freed upon abort */
+  mod_cb_info_t *icb;
+  void *addr;
+
+
+  assert(mod_cb.key >= 0);
+  icb = (mod_cb_info_t *)stm_get_specific(mod_cb.key);
+  assert(icb != NULL);
+
+
+  /* Round up size */
+  if (sizeof(stm_word_t) == 4) {
+    size = (size + 3) & ~(size_t)0x03;
+  } else {
+    size = (size + 7) & ~(size_t)0x07;
+  }
+  
+
+  int category = 0;
+  category = sizetoclass_pop[size >> 3];
+  if (category > 8) {fprintf(stderr, "Module mod_mem: unavailable category\n"); exit(1);} 
+
+  void *address = mem_pop(icb, category);
+  if (address != NULL) {
+    return address;
+  }
+
+  if (unlikely((addr = malloc(size)) == NULL)) {
+    perror("malloc");
+    exit(1);
+  }
+
+  mod_mem_block_t *mb;
+  mb = &(icb->allocated[icb->num_allocated++]);
+  mb->addr = addr;
+  mb->category = sizetoclass_push[size >> 3];
+  if (icb->num_allocated >= PRE_ALLOCATED_ENTRIES) {
+    perror("need extension");
+    exit(1);
+  }
+
+  return addr;
+}
+
+
+
+static inline
+void *int_stm_calloc(struct stm_tx *tx, size_t nm, size_t size)
+{
+  /* Memory will be freed upon abort */
+  mod_cb_info_t *icb;
+  void *addr;
+
+
+  assert(mod_cb.key >= 0);
+  icb = (mod_cb_info_t *)stm_get_specific(mod_cb.key);
+  assert(icb != NULL);
+
+
+  /* Round up size */
+  if (sizeof(stm_word_t) == 4) {
+    size = (size + 3) & ~(size_t)0x03;
+  } else {
+    size = (size + 7) & ~(size_t)0x07;
+  }
+
+  int category = sizetoclass_pop[size >> 3];
+  if (category > 8) {fprintf(stderr, "Module mod_mem: unavailable category\n"); exit(1);} 
+
+  void *address = mem_pop(icb, category);
+  if (address != NULL) {
+    return address;
+  }
+
+  if ((addr = calloc(nm, size)) == NULL) {
+    perror("calloc");
+    exit(1);
+  }
+
+  mod_mem_block_t *mb;
+  mb = &(icb->allocated[icb->num_allocated++]);
+  mb->addr = addr;
+  mb->category = sizetoclass_push[size >> 3];
+  if (icb->num_allocated >= PRE_ALLOCATED_ENTRIES) {
+    perror("need extension");
+    exit(1);
+  }
+
+  return addr;
+}
+
+
+#ifdef EPOCH_GC
+static void
+epoch_free(void *addr)
+{
+  if (mod_cb.use_gc) {
+    /* TODO use tx->end could be also used */
+    stm_word_t t = stm_get_clock();
+    gc_free(addr, t);
+  } else {
+    free(addr);
+  }
+}
+#endif /* EPOCH_GC */
+
+static inline
+void int_stm_free2(struct stm_tx *tx, void *addr, size_t idx, size_t size)
+{
+  /* Memory disposal is delayed until commit */
+  mod_cb_info_t *icb;
+
+
+  assert(mod_cb.key >= 0);
+  icb = (mod_cb_info_t *)stm_get_specific(mod_cb.key);
+  assert(icb != NULL);
+
+
+  int category = 0;
+
+  /* TODO: if block allocated in same transaction => no need to overwrite */
+  if (size > 0) {
+    category = sizetoclass_push[size >> 3];
+    stm_word_t *a;
+    /* Overwrite to prevent inconsistent reads */
+    if (sizeof(stm_word_t) == 4) {
+      idx = (idx + 3) >> 2;
+      size = (size + 3) >> 2;
+    } else {
+      idx = (idx + 7) >> 3;
+      size = (size + 7) >> 3;
+    }
+    a = (stm_word_t *)addr + idx;
+    while (size-- > 0) {
+      /* Acquire lock and update version number */
+      stm_store2_tx(tx, a++, 0, 0);
+    }
+  }
+  /* Schedule for removal */
+#ifdef EPOCH_GC
+  mod_cb_add_on_commit(icb, epoch_free, addr);
+#else /* ! EPOCH_GC */
+
+  mod_mem_block_t *mb;
+
+  mb = &(icb->freed[icb->num_freed++]);
+  if (icb->num_freed >= PRE_ALLOCATED_ENTRIES) {
+    perror("need extension");
+    exit(1);
+  }
+  mb->addr = addr;
+  mb->category = category;
+
+#endif /* ! EPOCH_GC */
+}
+
+
+
+
+
+
+/*
+ * Called upon transaction commit.
+ */
+static void mod_cb_on_commit(void *arg)
+{
+  mod_cb_info_t *icb;
+
+  icb = (mod_cb_info_t *)stm_get_specific(mod_cb.key);
+  assert(icb != NULL);
+
+  cache_commit(icb);
+
+  mod_mem_block_t *mb;
+  icb->num_allocated = 0;
+  int i;
+  for (i=0; i<icb->num_freed; i++) {
+    mb = &(icb->freed[i]);	   
+    mem_push(icb, mb->category, mb->addr);
+  }
+  icb->num_freed = 0;
+
+  /* Call commit callback */
+  while (icb->commit_nb > 0) {
+    icb->commit_nb--; 
+    icb->commit[icb->commit_nb].f(icb->commit[icb->commit_nb].arg);
+  }
+  /* Reset abort callback */
+  icb->abort_nb = 0;
+}
+
+/*
+ * Called upon transaction abort.
+ */
+static void mod_cb_on_abort(void *arg)
+{
+  mod_cb_info_t *icb;
+
+  icb = (mod_cb_info_t *)stm_get_specific(mod_cb.key);
+  assert(icb != NULL);
+
+  cache_abort(icb);
+
+  mod_mem_block_t *mb;
+  icb->num_freed = 0;
+  int i;
+  for (i=0; i<icb->num_allocated; i++) {
+    mb = &(icb->allocated[i]);	   
+    mem_push(icb, mb->category, mb->addr);
+  }
+  icb->num_allocated = 0;
+
+  /* Call abort callback */
+  while (icb->abort_nb > 0) {
+    icb->abort_nb--;
+    icb->abort[icb->abort_nb].f(icb->abort[icb->abort_nb].arg);
+  }
+  /* Reset commit callback */
+  icb->commit_nb = 0;
+}
+
+/*
+ * Called upon thread creation.
+ */
+static void mod_cb_on_thread_init(void *arg)
+{
+  mod_cb_info_t *icb;
+
+  if ((icb = (mod_cb_info_t *)xmalloc(sizeof(mod_cb_info_t))) == NULL)
+    goto err_malloc;
+  icb->commit_nb = icb->abort_nb = 0;
+  icb->commit_size = icb->abort_size = DEFAULT_CB_SIZE;
+  icb->commit = xmalloc(sizeof(mod_cb_entry_t) * icb->commit_size);
+  icb->abort = xmalloc(sizeof(mod_cb_entry_t) * icb->abort_size);
+  if (unlikely(icb->commit == NULL || icb->abort == NULL))
+    goto err_malloc;
+
+  stm_set_specific(mod_cb.key, icb);
+
+
+  int ii;
+  for (ii=0; ii<NUM_CATEGORIES+1; ii++) {
+    icb->cache.num_elements[ii] = 0;  
+    icb->cache.speculative[ii] = 0;
+    icb->cache.max_size[ii] = 8;
+
+    icb->cache.category[ii] = xmalloc(sizeof(void *) * icb->cache.max_size[ii]);
+    if (unlikely(icb->cache.category[ii] == NULL)) goto err_malloc;
+
+
+  }
+
+  if ((icb->allocated = (mod_mem_block_t *)malloc(sizeof(mod_mem_block_t)*PRE_ALLOCATED_ENTRIES)) == NULL) {
+    perror("malloc");
+    exit(1);
+  }
+  icb->num_allocated = 0;
+
+  /* freed cache */
+  if ((icb->freed = (mod_mem_block_t *)malloc(sizeof(mod_mem_block_t)*PRE_ALLOCATED_ENTRIES)) == NULL) {
+    perror("malloc");
+    exit(1);
+  }
+  icb->num_freed = 0;
+
+
+  return;
+ err_malloc:
+   perror("malloc");
+   exit(1);
+}
+
+/*
+ * Called upon thread deletion.
+ */
+static void mod_cb_on_thread_exit(void *arg)
+{
+  mod_cb_info_t *icb;
+
+  icb = (mod_cb_info_t *)stm_get_specific(mod_cb.key);
+  assert(icb != NULL);
+
+
+
+  xfree(icb->abort);
+  xfree(icb->commit);
+  xfree(icb);
+}
+
+static INLINE void
+mod_cb_mem_init(void)
+{
+  if (mod_cb.key >= 0)
+    goto already_init;
+
+  stm_register(mod_cb_on_thread_init, mod_cb_on_thread_exit, NULL, NULL, mod_cb_on_commit, mod_cb_on_abort, NULL);
+  mod_cb.key = stm_create_specific();
+  if (unlikely(mod_cb.key < 0)) {
+    fprintf(stderr, "Cannot create specific key\n");
+    exit(1);
+  }
+
+ already_init:
+  return;
+}
+
+void mod_mem_init(int use_gc)
+{
+  mod_cb_mem_init();
+#ifdef EPOCH_GC
+  mod_cb.use_gc = use_gc;
+#endif /* EPOCH_GC */
+}
+

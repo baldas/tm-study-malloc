@@ -1,0 +1,12 @@
+STM flags    : -I./include -I./src -DNDEBUG -D_REENTRANT -I./src/atomic_ops -I./src -DDESIGN=0 -DCM=0 -DIRREVOCABLE_ENABLED -DTM_STATISTICS -DTM_STATISTICS2 -UNO_DUPLICATES_IN_RW_SETS -UWAIT_YIELD -UUSE_BLOOM_FILTER -UEPOCH_GC -UCONFLICT_TRACKING -UREAD_LOCKED_DATA -ULOCK_IDX_SWAP -UDEBUG -UDEBUG2 -USIGNAL_HANDLER -DTLS_COMPILER -UUNIT_TX -O3 -march=native -fno-strict-aliasing -fno-stack-protector -Wall -Wno-unused-function -Wno-unused-label
+Time = 1.86002
+#commits      : 3408171 
+#aborts       : 25197468 
+  #lock-r     : 25019913 
+  #lock-w     : 177521 
+  #val-r      : 0 
+  #val-w      : 34 
+  #val-c      : 0 
+  #inv-mem    : 0 
+#aborts>=1    : 938404 
+#aborts>=2    : 860730 

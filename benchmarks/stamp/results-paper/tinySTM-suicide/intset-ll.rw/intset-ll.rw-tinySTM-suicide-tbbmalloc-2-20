@@ -1,0 +1,34 @@
+Set type     : linked list
+CM           : DEFAULT
+Duration     : 10000
+Initial size : 4096
+Nb threads   : 2
+Value range  : 8192
+Seed         : 0
+Update rate  : 60
+Alternate    : 1
+Unit tx      : 0
+Type sizes   : int=4/long=8/ptr=8/word=8
+Initializing STM
+STM flags    : -I./include -I./src -DNDEBUG -D_REENTRANT -I./src/atomic_ops -I./src -DDESIGN=0 -DCM=0 -DIRREVOCABLE_ENABLED -DTM_STATISTICS -DTM_STATISTICS2 -UNO_DUPLICATES_IN_RW_SETS -UWAIT_YIELD -UUSE_BLOOM_FILTER -UEPOCH_GC -UCONFLICT_TRACKING -UREAD_LOCKED_DATA -ULOCK_IDX_SWAP -UDEBUG -UDEBUG2 -USIGNAL_HANDLER -DTLS_COMPILER -UUNIT_TX -O3 -march=native -fno-strict-aliasing -fno-stack-protector -Wall -Wno-unused-function -Wno-unused-label
+Adding 4096 entries to set
+Set size     : 4096
+Creating thread 0
+Creating thread 1
+STARTING...
+STOPPING...
+Set size      : 4097 (expected: 4097)
+Duration      : 10001 (ms)
+#txs          : 368761 ( 36872.412759 / s )
+#read txs     : 146846 ( 14683.131687 / s )
+#update txs   : 221915 ( 22189.281072 / s )
+#commits      : 368761 
+#aborts       : 82059 
+  #lock-r     : 20678 
+  #lock-w     : 0 
+  #val-r      : 36721 
+  #val-w      : 0 
+  #val-c      : 24660 
+  #inv-mem    : 0 
+#aborts>=1    : 47152 
+#aborts>=2    : 15410 

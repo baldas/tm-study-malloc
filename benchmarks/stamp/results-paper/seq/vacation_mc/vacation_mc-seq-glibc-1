@@ -1,0 +1,30 @@
+
+BeginRegion 0: 0.000716925
+Initializing manager... done.
+Initializing clients... done.
+    Transactions        = 4194304
+    Clients             = 1
+    Transactions/client = 4194304
+    Queries/transaction = 4
+    Relations           = 1048576
+    Query percent       = 60
+    Query range         = 629146
+    Percent user        = 90
+Running clients... 
+BeginRegion 1: 8.04301
+
+BeginRegion 2: 41.5012
+done.
+Time = 33.458236
+Checking tables... done.
+Deallocating memory... done.
+
+BeginRegion 3: 44.0905
+malloc_count ### mallocs/peak: 23,394,496 20,716,703   frees: 6,807,917    total: 671,223,944   peak: 600,395,816   current: 402,149,896
+==========
+bins: 16  32  48  64  96  128  256  512  1024  >1024 mallocs frees mem-allocated 
+sequential: 1,048,583  1,048,578  7,340,032  1  0  0  0  0  1  4  9,437,199  4,130,109  385,891,768
+parallel: 0  4  0  0  0  0  0  0  0  0  4  4  128
+transactional: 6,891,629  6,891,631  174,033  0  0  0  0  0  0  0  13,957,293  2,677,804  285,332,048
+==========
+total = 23,394,496

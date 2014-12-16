@@ -1,0 +1,24 @@
+
+/* ################################################################### *
+ * TYPES
+ * ################################################################### */
+#define DEFAULT_CB_SIZE                 16
+
+typedef struct mod_cb_entry {           /* Callback entry */
+  void (*f)(void *);                    /* Function */
+  void *arg;                            /* Argument to be passed to function */
+} mod_cb_entry_t;
+
+
+/* TODO: to avoid false sharing, this should be in a dedicated cacheline.
+ * Unfortunately this will cost one cache line for each module. Probably
+ * mod_cb_mem could be included always in mainline stm since allocation is
+ * common in transaction (?). */
+static union {
+  struct {
+    int key;
+    unsigned int use_gc;
+  };
+  char padding[CACHELINE_SIZE];
+} ALIGNED mod_cb = {{.key = -1}};
+

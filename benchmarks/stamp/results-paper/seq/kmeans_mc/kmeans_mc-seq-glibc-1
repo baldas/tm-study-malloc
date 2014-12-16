@@ -1,0 +1,17 @@
+
+BeginRegion 0: 0.000565052
+
+BeginRegion 1: 1.21618
+
+BeginRegion 2: 4.39392
+Time = 3.17775
+
+BeginRegion 3: 4.39571
+malloc_count ### mallocs/peak: 50 14   frees: 50    total: 19,099,544   peak: 18,302,640   current: 0
+==========
+bins: 16  32  48  64  96  128  256  512  1024  >1024 mallocs frees mem-allocated 
+sequential: 34  1  0  0  0  3  0  0  2  10  50  46  19,099,544
+parallel: 0  0  0  0  0  0  0  0  0  0  0  4  0
+transactional: 0  0  0  0  0  0  0  0  0  0  0  0  0
+==========
+total = 50

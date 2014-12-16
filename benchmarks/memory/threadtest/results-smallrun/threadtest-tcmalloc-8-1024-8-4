@@ -1,0 +1,3 @@
+Running threadtest for 8 threads, 50000000 iterations, 8 objects, 0 work and 1024 size...
+Time elapsed = 2.241664
+Throughput = 178438860.350124

@@ -1,0 +1,23 @@
+
+BeginRegion 0: 0.000566959
+Percent attack  = 10
+Max data length = 128
+Num flow        = 262144
+Random seed     = 1
+Num attack      = 29395
+
+BeginRegion 1: 10.9035
+
+BeginRegion 2: 47.3101
+Time            = 36.406631
+Num found       = 29395
+
+BeginRegion 3: 51.2623
+malloc_count ### mallocs/peak: 17,117,715 14,996,457   frees: 17,117,715    total: 732,273,876   peak: 538,236,936   current: 0
+==========
+bins: 16  32  48  64  96  128  256  512  1024  >1024 mallocs frees mem-allocated 
+sequential: 54,643  58,552  7,801,959  128,018  144,542  118,690  4,238  2  5  35  8,310,684  8,310,680  568,175,309
+parallel: 2  2  0  0  0  0  0  0  1  0  5  262,153  640
+transactional: 8,108,082  274,440  274,874  29,458  59,313  58,987  1,872  0  0  0  8,807,026  8,544,882  164,097,927
+==========
+total = 17,117,715

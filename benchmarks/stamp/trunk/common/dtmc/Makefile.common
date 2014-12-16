@@ -1,0 +1,54 @@
+# Dresden TM Compiler (DTMC, also named Tanger)
+
+# ======== Defines ========
+LLVMBUILD       ?= $(shell llvm-config --build-mode)
+
+TANGERHOME      ?= TANGERHOME_IS_NOT_SET
+TANGERINCLUDE   ?= $(TANGERHOME)/include
+TANGERLIB       ?= $(TANGERHOME)/lib
+TANGERBIN       ?= $(TANGERHOME)/bin
+TANGERPASS      ?= $(TANGERLIB)/libtanger.so
+
+STMLIBDIR       ?= $(TANGERLIB)
+STMSUPPORTDIR	?= $(TANGERLIB)
+
+OPT             ?= opt
+LLVMLD          ?= llvm-ld
+LLVMGCC         ?= llvm-gcc
+LLVMDIS         ?= llvm-dis
+LLC             ?= llc
+GCC             ?= gcc
+TMLINK          ?= $(TANGERBIN)/tmlink
+
+CPPFLAGS        += -I../lib -I../common/dtmc -I$(TANGERINCLUDE)
+CFLAGS          += -Wall -fgnu-tm -O3
+TMLINKFLAGS     ?= -stmsupport=$(STMSUPPORTDIR) -stmlib=$(STMLIBDIR) -tanger-resolve-nontxnal=false -tm-support-file=$(STMLIBDIR)/libtanger-stm.support
+LDFLAGS         ?= -lm -lpthread
+
+BCOBJS          := ${OBJS:.o=.bc}
+
+## Note: this is the only runtime that doesn't use the
+##       common Makefile rules.
+# ======== Rules ========
+.PHONY: default
+default: $(PROG)
+
+.PHONY: clean
+clean:
+	$(RM) $(OBJS) $(BCOBJS) $(PROG)
+ 
+# native binary from input files (using tmlink)
+$(PROG): $(BCOBJS) $(TANGERPASS) $(STMSUPPORTDIR)/stmsupport.bc $(STMLIBDIR)/libtanger-stm.bc $(STMLIBDIR)/libtanger-stm.a
+	$(TMLINK) $(TMLINKFLAGS) -o $@ $(BCOBJS) $(LDFLAGS)
+
+# .bc from sources
+%.bc: %.c *.h ../lib/*.h
+	$(LLVMGCC) $(CPPFLAGS) -emit-llvm -c $(CFLAGS) -o $@ $<
+
+lib_%.bc: ../lib/%.c ../lib/*.h
+	$(LLVMGCC) $(CPPFLAGS) -emit-llvm -c $(CFLAGS) -o $@ $<
+
+# disassemble .bc
+%.ll: %.bc
+	$(LLVMDIS) $< -f -o $@
+

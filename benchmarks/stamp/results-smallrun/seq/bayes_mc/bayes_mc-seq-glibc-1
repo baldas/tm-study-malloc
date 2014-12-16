@@ -1,0 +1,31 @@
+
+BeginRegion 0: 0.000566959
+Random seed                = 1
+Number of vars             = 32
+Number of records          = 4096
+Max num parents            = 10
+% chance of parent         = 40
+Insert penalty             = 2
+Max num edge learned / var = 8
+Operation quality factor   = 1.000000
+Generating data... done.
+Generating adtree... done.
+Adtree time = 57.379478
+Learning structure...
+BeginRegion 1: 59.5497
+
+BeginRegion 2: 111.632
+done.
+Time = 52.082329
+Learn score  = -66247.156250
+Actual score = -64654.265625
+
+BeginRegion 3: 329.718
+malloc_count ### mallocs/peak: 183,637,447 69,297,946   frees: 183,637,447    total: 5,929,238,365   peak: 2,119,930,805   current: 0
+==========
+bins: 16  32  48  64  96  128  256  512  1024  >1024 mallocs frees mem-allocated 
+sequential: 18,424,629  63,211,522  230,496  3,193,555  53,264  746,845  18,278  8  4  9  85,878,610  85,878,882  2,442,988,501
+parallel: 995,833  57,000,840  21,615,886  15,999,415  2,145,548  5  1  2  0  0  97,757,530  97,757,534  3,486,228,952
+transactional: 1,307  0  0  0  0  0  0  0  0  0  1,307  1,031  20,912
+==========
+total = 183,637,447

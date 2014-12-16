@@ -1,0 +1,22 @@
+# Intel STM Compiler
+# TMBUILD ?= icctm
+
+# ======== Defines ========
+CC       := icc
+#CPPFLAGS += -DNDEBUG
+CPPFLAGS += -I../lib -I ../common/$(TMBUILD)
+CFLAGS   += -Wall
+CFLAGS   += -Qtm_enabled
+CFLAGS   += -O3
+# Suppress warning when add a new attribute to an existing definition
+CFLAGS   += -wd2306
+# Additional compilation flags
+# CFLAGS += -fast
+# LDFLAGS += -ipo -O3
+
+LD       := icc
+LDFLAGS  += -lpthread
+LDFLAGS  += -litm
+LIBDEPS  += 
+
+include ../common/Makefile.common

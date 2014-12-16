@@ -1,0 +1,21 @@
+
+BeginRegion 0: 0.000515938
+Maze dimensions = 512 x 512 x 7
+Paths to route  = 512
+
+BeginRegion 1: 0.019237
+
+BeginRegion 2: 96.0977
+Paths routed    = 512
+Time            = 96.078508
+Verification passed.
+
+BeginRegion 3: 96.1317
+malloc_count ### mallocs/peak: 7,629 2,071   frees: 7,629    total: 48,516,848   peak: 31,615,176   current: 0
+==========
+bins: 16  32  48  64  96  128  256  512  1024  >1024 mallocs frees mem-allocated 
+sequential: 1,031  1,034  3  2  0  2  2  2  4  7  2,087  2,598  29,427,288
+parallel: 1,027  1,028  1  514  0  514  514  512  501  930  5,541  5,031  19,089,544
+transactional: 1  0  0  0  0  0  0  0  0  0  1  0  16
+==========
+total = 7,629

@@ -1,0 +1,9 @@
+Angle constraint = 15.000000
+Reading input... done.
+Initial number of mesh elements = 1999998
+Initial number of bad elements  = 267838
+Starting triangulation... done.
+Time                            = 11.006
+Final mesh size                 = 2840482
+Number of elements processed    = 420110
+Final mesh is valid.

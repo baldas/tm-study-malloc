@@ -1,0 +1,30 @@
+# GCC sequential build
+# TMBUILD ?= seq
+
+# ======== Defines ========
+CC       := gcc
+#CPPFLAGS += -DNDEBUG
+CPPFLAGS += -I../lib -I../common/$(TMBUILD)
+CFLAGS   += -Wall -Wextra
+CFLAGS   += -O3
+
+LD       := gcc
+LDFLAGS  += -lpthread
+
+# ======== Rules ========
+.PHONY: default
+default: $(PROG)
+
+.PHONY: clean
+clean:
+	$(RM) $(OBJS) $(PROG)
+
+$(PROG): $(OBJS)
+	$(LD) $^ $(LDFLAGS) -o $(PROG)
+
+%.o: %.c *.h ../lib/*.h
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+lib_%.o: ../lib/%.c ../lib/*.h
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	

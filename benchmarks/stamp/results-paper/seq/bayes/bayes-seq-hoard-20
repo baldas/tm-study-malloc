@@ -1,0 +1,15 @@
+Random seed                = 1
+Number of vars             = 32
+Number of records          = 4096
+Max num parents            = 10
+% chance of parent         = 40
+Insert penalty             = 2
+Max num edge learned / var = 8
+Operation quality factor   = 1.000000
+Generating data... done.
+Generating adtree... done.
+Adtree time = 22.464159
+Learning structure...done.
+Time = 17.423062
+Learn score  = -66247.156250
+Actual score = -64654.265625

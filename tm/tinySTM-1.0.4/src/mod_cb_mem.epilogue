@@ -1,0 +1,108 @@
+
+
+/* ################################################################### *
+ * CALLBACKS FUNCTIONS
+ * ################################################################### */
+
+
+/*
+ * Register abort callback for the CURRENT transaction.
+ */
+int stm_on_abort(void (*on_abort)(void *arg), void *arg)
+{
+  mod_cb_info_t *icb;
+
+  assert(mod_cb.key >= 0);
+  icb = (mod_cb_info_t *)stm_get_specific(mod_cb.key);
+  assert(icb != NULL);
+
+  mod_cb_add_on_abort(icb, on_abort, arg);
+
+  return 1;
+}
+
+
+/*
+ * Register commit callback for the CURRENT transaction.
+ */
+int stm_on_commit(void (*on_commit)(void *arg), void *arg)
+{
+  mod_cb_info_t *icb;
+
+  assert(mod_cb.key >= 0);
+  icb = (mod_cb_info_t *)stm_get_specific(mod_cb.key);
+  assert(icb != NULL);
+
+  mod_cb_add_on_commit(icb, on_commit, arg);
+
+  return 1;
+}
+
+
+/*
+ * Called by the CURRENT thread to allocate memory within a transaction.
+ */
+void *stm_malloc(size_t size)
+{
+  struct stm_tx *tx = stm_current_tx();
+  return int_stm_malloc(tx, size);
+}
+
+void *stm_malloc_tx(struct stm_tx *tx, size_t size)
+{
+  return int_stm_malloc(tx, size);
+}
+
+
+/*
+ * Called by the CURRENT thread to allocate initialized memory within a transaction.
+ */
+void *stm_calloc(size_t nm, size_t size)
+{
+  struct stm_tx *tx = stm_current_tx();
+  return int_stm_calloc(tx, nm, size);
+}
+
+void *stm_calloc_tx(struct stm_tx *tx, size_t nm, size_t size)
+{
+  return int_stm_calloc(tx, nm, size);
+}
+
+
+/*
+ * Called by the CURRENT thread to free memory within a transaction.
+ */
+void stm_free2(void *addr, size_t idx, size_t size)
+{
+  struct stm_tx *tx = stm_current_tx();
+  int_stm_free2(tx, addr, idx, size);
+}
+
+void stm_free2_tx(struct stm_tx *tx, void *addr, size_t idx, size_t size)
+{
+  int_stm_free2(tx, addr, idx, size);
+}
+
+
+/*
+ * Called by the CURRENT thread to free memory within a transaction.
+ */
+void stm_free(void *addr, size_t size)
+{
+  struct stm_tx *tx = stm_current_tx();
+  int_stm_free2(tx, addr, 0, size);
+}
+
+void stm_free_tx(struct stm_tx *tx, void *addr, size_t size)
+{
+  int_stm_free2(tx, addr, 0, size);
+}
+
+
+/*
+ * Initialize module.
+ */
+void mod_cb_init(void)
+{
+  mod_cb_mem_init();
+}

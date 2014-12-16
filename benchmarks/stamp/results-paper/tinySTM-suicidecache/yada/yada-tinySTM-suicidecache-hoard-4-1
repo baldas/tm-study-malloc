@@ -1,0 +1,20 @@
+STM flags    : -I./include -I./src -DNDEBUG -D_REENTRANT -I./src/atomic_ops -I./src -DDESIGN=0 -DCM=0 -DIRREVOCABLE_ENABLED -DTM_STATISTICS -DTM_STATISTICS2 -UNO_DUPLICATES_IN_RW_SETS -UWAIT_YIELD -UUSE_BLOOM_FILTER -UEPOCH_GC -UCONFLICT_TRACKING -UREAD_LOCKED_DATA -ULOCK_IDX_SWAP -UDEBUG -UDEBUG2 -USIGNAL_HANDLER -DTLS_COMPILER -UUNIT_TX -DALLOC_OPT_CACHE -O3 -march=native -fno-strict-aliasing -fno-stack-protector -Wall -Wno-unused-function -Wno-unused-label
+Angle constraint = 15.000000
+Reading input... done.
+Initial number of mesh elements = 1999998
+Initial number of bad elements  = 267838
+Starting triangulation... done.
+Time                            = 10.509
+Final mesh size                 = 2840854
+Number of elements processed    = 466932
+Final mesh is valid.
+#commits      : 2558326 
+#aborts       : 56382012 
+  #lock-r     : 56338638 
+  #lock-w     : 29421 
+  #val-r      : 2068 
+  #val-w      : 1 
+  #val-c      : 11884 
+  #inv-mem    : 0 
+#aborts>=1    : 286080 
+#aborts>=2    : 229299 

@@ -1,0 +1,7 @@
+Percent attack  = 10
+Max data length = 128
+Num flow        = 262144
+Random seed     = 1
+Num attack      = 29395
+Time            = 31.492139
+Num found       = 29395

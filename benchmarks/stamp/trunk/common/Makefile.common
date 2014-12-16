@@ -1,0 +1,49 @@
+# ======== Rules ========
+OBJDIR = ../../$(TMBUILD)/$(PROG)/
+
+_OBJS = $(patsubst %,$(OBJDIR)/%,$(OBJS))
+_PROG = $(OBJDIR)/$(PROG)
+
+#CFLAGS   += -m32 -O3
+#LDFLAGS  += -m32
+
+BASEDIR=/home/baldas/artifact
+
+PAPIDIR=$(BASEDIR)/tools/papi
+ifeq ($(PAPI),yes)
+  CFLAGS += -DUSE_PAPI -I$(PAPIDIR)/install/include
+  LDFLAGS += -L/$(PAPIDIR)/install/lib -Wl,-rpath=$(PAPIDIR)/install/lib -lpfm -lpapi
+  #LIBDEPS += $(PAPIDIR)/install/lib/libpapi.a
+endif
+
+ifeq ($(AFFINITY),yes)
+  CFLAGS += -DTHREAD_AFFINITY
+endif
+
+
+MCOUNTDIR=$(BASEDIR)/tools/malloc_profile
+ifeq ($(MALLOCPROFILE),yes)
+  CFLAGS  += -DMALLOC_COUNT -I$(MCOUNTDIR)
+  LDFLAGS += -L$(MCOUNTDIR) -Wl,-rpath=$(MCOUNTDIR) -lpthread -lmallocprof
+endif
+
+.PHONY: default
+default: $(PROG)
+
+.PHONY: $(PROG)
+$(PROG): $(_PROG)
+
+.PHONY: clean
+clean:
+	$(RM) $(_OBJS) $(_PROG)
+
+$(_PROG): $(_OBJS) $(LIBDEPS)
+	$(LD) $^ $(LDFLAGS) -o $(_PROG)
+
+$(OBJDIR)/%.o: %.c *.h ../lib/*.h
+	@mkdir -p $(@D)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/lib_%.o: ../lib/%.c ../lib/*.h
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	

@@ -1,0 +1,31 @@
+# rstm (http://www.cs.rochester.edu/research/synchronization/rstm) build
+# Nota: rstm has no 'make install' so the library and the include are in different locations.
+#       rstm must be built in the source directory to satisfy both.
+# TMBUILD ?= rstm
+
+
+# ======== Defines ========
+# RSTM only gives C++ interface with function definitions in header files.
+# So C++ must be used here.
+CC        := g++
+#CPPFLAGS  += -DNDEBUG
+CPPFLAGS  += -I../lib -I../common/$(TMBUILD)
+CFLAGS    += -Wall -Wextra
+CFLAGS    += -O3
+
+LD        := g++
+LDFLAGS   += -lpthread
+
+TMLIBDIR  ?= TMLIBDIR_IS_NOT_SET
+# RSTM has two different library name if 32 or 64bits
+TMLIBNAME ?= stm64
+CPPFLAGS  += -I$(TMLIBDIR)/include
+# RSTM requires SSE support
+CFLAGS    += -msse2
+# G++ is not permissive on cast
+CFLAGS    += -fpermissive
+# RSTM requires rt library
+LDFLAGS   += -L$(TMLIBDIR)/libstm -l$(TMLIBNAME) -lrt
+LIBDEPS  += $(TMLIBDIR)/libstm/lib$(TMLIBNAME).a
+
+include ../common/Makefile.common

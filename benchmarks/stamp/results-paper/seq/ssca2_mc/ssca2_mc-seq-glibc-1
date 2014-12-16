@@ -1,0 +1,50 @@
+
+BeginRegion 0: 0.00056386
+
+HPCS SSCA #2 Graph Analysis Executable Specification:
+Running...
+
+
+Number of processors:       1
+Problem Scale:              20
+Max parallel edges:         3
+Percent int weights:        0.600000
+Probability unidirectional: 1.000000
+Probability inter-clique:   1.000000
+Subgraph edge length:       3
+Kernel 3 data structure:    2
+
+
+Scalable Data Generator - genScalData() beginning execution...
+Finished generating edges
+No. of intra-clique edges - 22043427
+No. of inter-clique edges - 890631
+Total no. of edges        - 22934058
+
+Time taken for Scalable Data Generation is 11.547968 sec.
+
+
+	genScalData() completed execution.
+
+Kernel 1 - computeGraph() beginning execution...
+
+BeginRegion 1: 11.5486
+
+BeginRegion 2: 26.3042
+
+	computeGraph() completed execution.
+
+Time = 14.755616
+
+Time taken for all is 26.303584
+
+
+BeginRegion 3: 26.392
+malloc_count ### mallocs/peak: 105 76   frees: 105    total: 3,695,945,756   peak: 1,511,793,060   current: 0
+==========
+bins: 16  32  48  64  96  128  256  512  1024  >1024 mallocs frees mem-allocated 
+sequential: 2  2  1  0  0  1  0  65  1  22  94  95  2,578,408,484
+parallel: 0  0  0  0  0  0  0  0  2  9  11  10  1,117,537,272
+transactional: 0  0  0  0  0  0  0  0  0  0  0  0  0
+==========
+total = 105

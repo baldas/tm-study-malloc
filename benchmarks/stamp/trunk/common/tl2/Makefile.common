@@ -1,0 +1,19 @@
+# tl2 (http://stamp.stanford.edu) build
+#TMBUILD ?= tl2
+
+# ======== Defines ========
+CC       := gcc
+#CPPFLAGS += -DNDEBUG
+CPPFLAGS += -I../lib -I../common/$(TMBUILD)
+CFLAGS   += -Wall -Wextra
+CFLAGS   += -O3
+
+LD       := gcc
+LDFLAGS  += -lpthread
+
+TMLIBDIR ?= TMLIBDIR_IS_NOT_SET
+CPPFLAGS += -I$(TMLIBDIR)
+LDFLAGS  += -L$(TMLIBDIR) -ltl2
+LIBDEPS  += $(TMLIBDIR)/libtl2.a
+
+include ../common/Makefile.common

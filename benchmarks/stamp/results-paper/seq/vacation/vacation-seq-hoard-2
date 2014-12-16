@@ -1,0 +1,14 @@
+Initializing manager... done.
+Initializing clients... done.
+    Transactions        = 4194304
+    Clients             = 1
+    Transactions/client = 4194304
+    Queries/transaction = 4
+    Relations           = 1048576
+    Query percent       = 60
+    Query range         = 629146
+    Percent user        = 90
+Running clients... done.
+Time = 33.150549
+Checking tables... done.
+Deallocating memory... done.

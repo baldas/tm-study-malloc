@@ -1,0 +1,19 @@
+# tinySTM++ build
+#TMBUILD := tinystmpp
+
+# ======== Defines ========
+CC       := gcc
+#CPPFLAGS += -DNDEBUG
+CPPFLAGS += -I../lib -I../common/$(TMBUILD)
+CFLAGS   += -Wall -Wextra
+CFLAGS   += -O3
+
+LD       := gcc
+LDFLAGS  += -lpthread
+
+TMLIBDIR ?= TMLIBDIR_IS_NOT_SET
+CPPFLAGS += -I$(TMLIBDIR)/include -I$(TMLIBDIR)/src/atomic_ops
+LDFLAGS  += -L$(TMLIBDIR)/lib/native-wt -ltstm
+LIBDEPS  += $(TMLIBDIR)/lib/native-wt/libtstm.a
+
+include ../common/Makefile.common
