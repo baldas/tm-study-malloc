@@ -101,19 +101,21 @@ For instance, to run the `yada` application 5 times you should run:
 `./execute.sh -a "yada" -n 5`
 
 This will run the application with the default STM library (tinySTM), with four
-allocators (glibc, hoard, tbbmalloc, and tcmalloc), 1, 2, 4, and 8 threads, 
-five times each. Try using `./execute.sh -h` for some help.
+allocators (glibc, hoard, tbbmalloc, and tcmalloc), 1, 2, 4, and 8 threads,
+five times each. Try using `./execute.sh -h` for some help.  The execution
+script will create a subdirectory named `results` (default) in the stamp
+directory to save all runs.
 
 To post-process the data and generate the chart for the previous executions you 
 could try the following:
 
-`./plot-graph.sh -d results-dir -g bar-stamp.gnu -a "yada"`
+`./plot-graph.sh -d stamp -g bar-stamp.gnu -a "yada"`
 
-It will store the tables and chart inside directory named `results-dir` (flag
-`-d`).  The root directory for the results is stored in the `scripts.cfg` file,
-variable `RESULTDIR`. This file also holds general configuration options used
-by the scripts.  The plot-graph relies on the `gnuplot` script (flag `-g`) to
-plot the graph. Currently, the ones provided (extension `.gnu`) only support 8
+It will store the tables and chart inside directory named `stamp` (flag `-d`).
+The root directory for tables and charts is stored in the `scripts.cfg` file,
+variable `TABDIR`. This file also holds general configuration options used by
+the scripts.  The plot-graph relies on the `gnuplot` script (flag `-g`) to plot
+the graph. Currently, the ones provided (extension `.gnu`) only support 8
 threads, but it should not be hard to change them to your needs.
 
 
@@ -122,4 +124,17 @@ welcome.  Also, take a look at our [artifact
 page](http://lampiao.lsc.ic.unicamp.br/~baldas/artifact/ppopp15-artifact.html)
 for further information.
 
+
+
+Known Issues
+---------------
+
+* When compiling the version of gperftools provided, you might run into a
+configuration issue due to a different version of automake. You can try to
+download and perform a local installation of automake 1.13 to solve the issue.
+
+* Only if you need PAPI and malloc count support: You need to manually set up
+  the `BASEDIR` variable in the
+`tm-study-malloc/benchmarks/stamp/trunk/common/Makefile.common` file with the
+absolute path of your base directory.
 
