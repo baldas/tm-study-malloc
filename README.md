@@ -42,26 +42,23 @@ Code Organization
 
 The code is organized in the following directory structure:
 
-.
-├── allocators
-├── benchmarks
-│   ├── memory
-│   │   └── threadtest
-│   │       ├── results-paper
-│   │       └── results-smallrun
-│   └── stamp
-│       ├── data
-│       ├── results-paper
-│       ├── results-smallrun
-│       ├── scripts
-│       ├── seq
-│       ├── tinySTM
-│       └── trunk
-├── tm
-│   └── tinySTM-1.0.4
-└── tools
-    ├── malloc_profile
-    └── papi-5.2.0
+* allocators
+* benchmarks
+  * memory
+    * threadtest
+      * results-paper
+      * results-smallrun 
+  * stamp
+    * data
+    * results-paper
+    * results-smallrun
+    * scripts
+    * trunk
+* tm
+  * tinySTM-1.0.4
+* tools
+  * malloc_profile
+  * papi-5.2.0
 
 The top directories contain the allocators, benchmarks, tm library and tools
 needed to run the experiments. Only the source code are provided.  Binaries are
@@ -111,7 +108,7 @@ could try the following:
 
 `./plot-graph.sh -d stamp -g bar-stamp.gnu -a "yada"`
 
-It will store the tables and chart inside directory named `stamp` (flag `-d`).
+It will store the tables and chart inside a directory named `stamp` (flag `-d`).
 The root directory for tables and charts is stored in the `scripts.cfg` file,
 variable `TABDIR`. This file also holds general configuration options used by
 the scripts.  The plot-graph relies on the `gnuplot` script (flag `-g`) to plot
