@@ -34,7 +34,7 @@ weird error message, this could be of help.
 * R Project - See http://www.r-project.org
 
 You should also check the dependences of each of the tools (allocators, STM,
-etc.) before compiling hem.
+etc.) before compiling them.
 
 
 Code Organization
@@ -61,7 +61,7 @@ The code is organized in the following directory structure:
   * papi-5.2.0
 
 The top directories contain the allocators, benchmarks, tm library and tools
-needed to run the experiments. Only the source code are provided.  Binaries are
+needed to run the experiments. Only the source code is provided.  Binaries are
 provided as part of our
 [artifact](http://lampiao.lsc.ic.unicamp.br/~baldas/artifact/ppopp15-artifact.html)
 only.
@@ -76,24 +76,21 @@ experiments.  This includes the allocators, tools, TM libraries and, finally,
 benchmarks. We provide a simple bash script to compile each of them (please
 enter their respective directories before executing the commands):
 
-* Allocators
-	`./gen-allocators.sh`
+* Allocators:	`./gen-allocators.sh`
 
-* Tools (needed if cache miss data is required)
-	`./gen-tools.sh`
+* Tools (needed if cache miss data is required): `./gen-tools.sh`
 
-* Threadtest
-	`make`
+* Threadtest: `make`
 
-* STAMP and Intset
-	`./compile-all.sh`
+* STAMP and Intset: `./compile-all.sh`
 
 
-If all succeeds you are ready to run the experiments. Most of the benchmarks 
-have a script to do it. You might want to look in the `benchmarks/stamp/scripts/`. 
-The main script is `execute.sh`, followed by `gen-data.sh` and `plot-graph.sh`. 
-They currently have a very limited but somewhat useful command-line help system.  
-For instance, to run the `yada` application 5 times you should run:
+If all succeeds you are ready to run the experiments. Most of the benchmarks
+have a script to do it. You might want to look in the
+`benchmarks/stamp/scripts/` directory.  The main script is `execute.sh`,
+followed by `gen-data.sh` and `plot-graph.sh`.  They currently have a very
+limited but somewhat useful command-line help system.  For instance, to
+execute the `yada` application 5 times you should run:
 
 `./execute.sh -a "yada" -n 5`
 
@@ -108,12 +105,13 @@ could try the following:
 
 `./plot-graph.sh -d stamp -g bar-stamp.gnu -a "yada"`
 
-It will store the tables and chart inside a directory named `stamp` (flag `-d`).
-The root directory for tables and charts is stored in the `scripts.cfg` file,
-variable `TABDIR`. This file also holds general configuration options used by
-the scripts.  The plot-graph relies on the `gnuplot` script (flag `-g`) to plot
-the graph. Currently, the ones provided (extension `.gnu`) only support 8
-threads, but it should not be hard to change them to your needs.
+It will store the tables and chart inside a directory named `stamp` (flag
+`-d`).  The root directory for tables and charts is stored in the
+`scripts.cfg` file, variable `TABDIR`. This file also holds general
+configuration options used by the scripts.  The `plot-graph.sh` script relies
+on the `gnuplot` script (flag `-g`) to plot the graph. Currently, the ones
+provided (extension `.gnu`) only support 8 threads, but it should not be hard
+to change them to your needs.
 
 
 Please keep in mind that this is working-in-progress and any help is really
